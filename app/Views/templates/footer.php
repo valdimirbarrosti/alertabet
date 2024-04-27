@@ -3,7 +3,7 @@
         <hr>
         <div class="row">
             <div class="col-md-12 text-center">
-                <p>&copy; <?php echo date("Y"); ?> Notifica Bet! Todos os direitos reservados.</p>
+                <p>&copy; <?php echo date("Y"); ?> Alerta Bet! Todos os direitos reservados.</p>
             </div>
         </div>
     </div>

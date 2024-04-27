@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bem-vindo ao Alerta Bet!</title>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <title>Alerta Bet!</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -39,11 +38,13 @@
             border-radius: 4px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            text-decoration: none;
         }
 
         .btn:hover {
             background-color: #45a049;
         }
+
     </style>
 </head>
 
@@ -53,9 +54,6 @@
         <p>O seu lugar para criar alertas das suas estratégias de apostas esportivas.</p>
         <a href="/jogos" class="btn">Ver Jogos</a>
     </div>
-
-    <script src="/js/jquery-3.3.1.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
 </body>
 
 </html>
