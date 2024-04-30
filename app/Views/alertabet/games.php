@@ -21,7 +21,7 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="apiKey">API Key:</label>
-                        <input type="text" class="form-control" id="apiKey" name="apiKey" required value="fefe30e5998c2209c0e2fd301b61fa58">
+                        <input type="text" class="form-control" id="apiKey" name="apiKey" required value="">
                     </div>
                 </div>
                 <!--
