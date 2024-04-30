@@ -22,7 +22,7 @@ function debug($var)
 function env($key, $default = null)
 {
 
-    $envDir = getMainDir() . '\.env';
+    $envDir = dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . '.env';
     if (!file_exists($envDir)) {
         return $default;
     }
@@ -43,9 +43,4 @@ function env($key, $default = null)
         }
     }
     return $default;
-}
-
-function getMainDir()
-{
-    return dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR;
 }

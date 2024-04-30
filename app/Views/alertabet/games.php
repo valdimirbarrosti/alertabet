@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <?php include(__DIR__ . '/../templates/header.php'); ?>
+    <?php include(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'header.php'); ?>
 
     <div class="container form-container">
         <hr>
@@ -21,10 +21,11 @@
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="apiKey">API Key:</label>
-                        <input type="text" class="form-control" id="apiKey" name="apiKey" required value="2e2398a0b79abd02a377d77186283aa0">
+                        <input type="text" class="form-control" id="apiKey" name="apiKey" required value="fefe30e5998c2209c0e2fd301b61fa58">
                     </div>
                 </div>
-                <div class="col-md-4">
+                <!--
+                <div class="col-md-3">
                     <div class="form-group">
                         <label for="sport">Esporte - Liga:</label>
                         <select class="form-control" id="sport" name="sport" required>
@@ -34,12 +35,14 @@
                         </select>
                     </div>
                 </div>
+                -->
                 <div class="col-md-4">
                     <div class="form-group">
                         <label for="markets">Mercado:</label>
                         <select class="form-control" id="markets" name="markets" required>
                             <option value="h2h">Resultado Final</option>
-                            <option value="totals">Over & Under 2.5 Gols</option>
+                            <option value="totals">Over/Under 2.5 Gols</option>
+
                         </select>
                     </div>
                 </div>
@@ -49,16 +52,6 @@
                         <select class="form-control" id="bookmakers" name="bookmakers" required>
                             <option value="betfair_ex_eu">Betfair Exchange</option>
                             <option value="pinnacle">Pinnacle</option>
-                            <option value="onexbet">1xBet</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="form-group">
-                        <label for="strategies">Estratégia:</label>
-                        <select class="form-control" id="strategies" name="strategies" required>
-                            <option value="favorite_turnaround">Virada Do Favorito</option>
-                            <option value="more_goals_will_come">Vai Sair Mais Gols</option>
                         </select>
                     </div>
                 </div>
@@ -72,50 +65,60 @@
     <div class="container">
         <hr>
         <h1>Jogos</h1>
-
-        <table>
-            <thead>
-                <tr>
-                    <th>Competição</th>
-                    <th>Hora do Evento</th>
-                    <th>Casa</th>
-                    <th>Odd</th>
-                    <th>Empate</th>
-                    <th>Odd</th>
-                    <th>Fora</th>
-                    <th>Odd</th>
-                    <th>Última Atualização</th>
-                    <th>Tipo</th>
-                    <th>Situação</th>
-                    <th>Alerta?</th>
-
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($table as $row) : ?>
+        <div class="table-container">
+            <table>
+                <thead>
                     <tr>
-                        <td><?= $row['competition'] ?></td>
-                        <td><?= $row['event_start_time'] ?></td>
-                        <td><?= $row['home_team'] ?></td>
-                        <td><?= $row['home_team_price'] ?></td>
-                        <td><?= $row['draw_name'] ?></td>
-                        <td><?= $row['draw_price'] ?></td>
-                        <td><?= $row['away_team'] ?></td>
-                        <td><?= $row['away_team_price'] ?></td>
-                        <td><?= $row['last_update'] ?></td>
-                        <td><?= $row['type'] ?></td>
-                        <td <?php if ($row['situation'] === "Iniciado"): ?>class="bold green"<?php elseif ($row['situation'] === "Aguardando Início"): ?>class="bold red"<?php endif; ?>><?= $row['situation'] ?></td>
-                        <td><?= $row['flag'] ?></td>
+                        <th>Competição</th>
+                        <th>Hora do Evento</th>
+                        <th>Casa</th>
+                        <th>Odd</th>
+                        <th>Empate</th>
+                        <th>Odd</th>
+                        <th>Fora</th>
+                        <th>Odd</th>
+                        <th>Última Atualização</th>
+                        <th>Tipo</th>
+                        <th>Over Odd</th>
+                        <th>Under Odd</th>
+                        <th>Favourite Totals</th>
+                        <th>Favourite Odd</th>
+                        <th>Situação</th>
+                        <th>Alerta?</th>
 
                     </tr>
-                <?php endforeach; ?>
+                </thead>
+                <tbody>
+                    <?php foreach ($table as $row) : ?>
+                        <tr>
+                            <td><?= $row['competition'] ?></td>
+                            <td><?= $row['event_start_time'] ?></td>
+                            <td><?= $row['home_team'] ?></td>
+                            <td><?= $row['home_team_price'] ?></td>
+                            <td><?= $row['draw_name'] ?></td>
+                            <td><?= $row['draw_price'] ?></td>
+                            <td><?= $row['away_team'] ?></td>
+                            <td><?= $row['away_team_price'] ?></td>
+                            <td><?= $row['last_update'] ?></td>
+                            <td><?= $row['type'] ?></td>
+                            <td><?= $row['over_price'] ?></td>
+                            <td><?= $row['under_price'] ?></td>
+                            <td <?php if ($row['favourite_totals'] === "Over") : ?>class="bold green" <?php elseif ($row['favourite_totals'] === "Under") : ?>class="bold red" <?php endif; ?>><?= $row['favourite_totals'] ?></td>
+                            <td <?php if ($row['favourite_totals_price'] === "Over") : ?>class="bold green" <?php elseif ($row['favourite_totals_price'] === "Under") : ?>class="bold red" <?php endif; ?>><?= $row['favourite_totals_price'] ?></td>
+                            <td <?php if ($row['situation'] === "Iniciado") : ?>class="bold green" <?php elseif ($row['situation'] === "Aguardando Início") : ?>class="bold red" <?php endif; ?>><?= $row['situation'] ?></td>
+                            <td><?= $row['flag'] ?></td>
 
-            </tbody>
-        </table>
+                        </tr>
+                    <?php endforeach; ?>
+
+                </tbody>
+            </table>
+        </div>
+
         <hr>
 
     </div>
-    <?php include(__DIR__ . '/../templates/footer.php'); ?>
+    <?php include(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'templates' . DIRECTORY_SEPARATOR . 'footer.php'); ?>
 
     <script src="/js/vendor/jquery/jquery-3.3.1.js"></script>
     <script src="/js/vendor/boostrap/bootstrap.min.js"></script>

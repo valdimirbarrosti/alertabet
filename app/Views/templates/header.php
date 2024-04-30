@@ -25,6 +25,12 @@
                                 <li class="nav-item">
                                     <a class="nav-link" href="/contato">Contato</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/jogos">Jogos</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/jogos/monitor">Monitor</a>
+                                </li>
                             </ul>
                         </div>
                     </div>

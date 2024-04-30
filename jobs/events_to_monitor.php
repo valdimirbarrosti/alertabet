@@ -1,8 +1,7 @@
 <?php
-date_default_timezone_set('America/Sao_Paulo');
-require_once(__DIR__ . '/../app/Helpers/functions.php');
-require getMainDir() . 'vendor/autoload.php';
 
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'App' . DIRECTORY_SEPARATOR . 'Helpers' . DIRECTORY_SEPARATOR . 'functions.php';
+require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
@@ -11,7 +10,7 @@ $apiUrl = env('API_URL');
 $apiKeyAlertaBet = env('API_KEY_ALERTA_BET');
 $markets = 'h2h';
 $bookmakers = 'betfair_ex_eu';
-
+$dbPath = 'sqlite:'.dirname(__DIR__) . DIRECTORY_SEPARATOR . 'storage' . DIRECTORY_SEPARATOR . 'alertabet.db';
 $arraySport = [
     'soccer_brazil_campeonato',
     'soccer_brazil_serie_b',
@@ -27,35 +26,6 @@ $arraySport = [
 ];
 
 
-/*
-//1º coletar todos titles  do elementos cujo valor da chave group é soccer:
-try {
-    $client = new Client();
-    $endpoint = $apiUrl . "sports?apiKey=$apiKeyAlertaBet";
-    $response = $client->request('GET', $endpoint);
-    $jsonResponse = $response->getBody();
-    $arraySports = json_decode($jsonResponse, true);
-    $arrayCompetitions = [];
-    foreach ($arraySports as $sport) {
-        if ($sport['group'] == 'Soccer') {
-            $arrayCompetitions[] = $sport['key'];
-        }
-    }
-} catch (RequestException $e) {
-    $response = $e->getResponse();
-    if ($response) {
-        $statusCode = $response->getStatusCode();
-        $errorBody = $response->getBody()->getContents();
-        echo "Erro $statusCode: $errorBody\n" . PHP_EOL ;
-    } else {
-        // Se não houver resposta, exibe uma mensagem genérica de erro
-        echo "Erro ao fazer a requisição: " . $e->getMessage() . "\n". PHP_EOL ;
-    }
-}
-*/
-
-
-//2º iterar o array de competições e buscar os eventos h2h da betfair de cada competição
 try {
     $arrayEventList = [];
     $client = new Client();
@@ -106,7 +76,7 @@ try {
                 $favouriteTeam = $away_team;
                 $favouriteTeamPrice = $away_team_price;
             }
-            if($favouriteTeamPrice >= 1.5) {
+            if ($favouriteTeamPrice >= 1.5) {
                 continue;
             }
 
@@ -116,7 +86,7 @@ try {
 
             try {
                 echo  $event['id'] .  PHP_EOL;
-                $pdo = new PDO('sqlite:C:/dev/projetos/alertabet/storage/alertabet.db');
+                $pdo = new PDO($dbPath);
                 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $values = array(
                     'id_event' => $event['id'],
@@ -167,22 +137,29 @@ try {
     }
 }
 
-
 /*
-//Inserção dos dados na base de dados
+//1º coletar todos titles  do elementos cujo valor da chave group é soccer:
 try {
-    $pdo = new PDO('sqlite:C:/dev/projetos/alertabet/storage/alertabet.db');
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);    
-
-    $query = "INSERT INTO logs (mensagem) VALUES (:mensagem)";
-
-    $stmt = $pdo->prepare($query);
-    $stmt->bindParam(':mensagem', $mensagem);
-    $stmt->execute();
-
-    echo "Operações executadas com sucesso!";
-} catch (PDOException $e) {
-    echo "Erro ao conectar ou executar as operações: " . $e->getMessage();
+    $client = new Client();
+    $endpoint = $apiUrl . "sports?apiKey=$apiKeyAlertaBet";
+    $response = $client->request('GET', $endpoint);
+    $jsonResponse = $response->getBody();
+    $arraySports = json_decode($jsonResponse, true);
+    $arrayCompetitions = [];
+    foreach ($arraySports as $sport) {
+        if ($sport['group'] == 'Soccer') {
+            $arrayCompetitions[] = $sport['key'];
+        }
+    }
+} catch (RequestException $e) {
+    $response = $e->getResponse();
+    if ($response) {
+        $statusCode = $response->getStatusCode();
+        $errorBody = $response->getBody()->getContents();
+        echo "Erro $statusCode: $errorBody\n" . PHP_EOL ;
+    } else {
+        // Se não houver resposta, exibe uma mensagem genérica de erro
+        echo "Erro ao fazer a requisição: " . $e->getMessage() . "\n". PHP_EOL ;
+    }
 }
-
 */

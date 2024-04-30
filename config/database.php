@@ -1,14 +1,10 @@
 <?php
 
-$dbConfig = [
-    'driver' => 'pgsql ',
+return $dbConfig = [
+    'driver' => 'sqlite ',
     'host' => '127.0.0.1',
-    'database' => 'barrosmvc',
-    'username' => 'postgres',
-    'password' => 'postgres',
+    'database' => 'alertabet.db',
+    'username' => '',
+    'password' => '',
     'charset' => 'utf8',
-    'options' => [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    ],
 ];

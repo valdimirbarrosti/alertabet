@@ -20,8 +20,7 @@ class Router
     {
         $method = $_SERVER['REQUEST_METHOD'];
         $uri = parse_url($_SERVER['REQUEST_URI']);
-        // Verifica se a rota possui parâmetros
-        if (!$uri['query']) {
+        if (!isset($uri['query'])) {
             $uri = $_SERVER['REQUEST_URI'];
             if (isset($this->routes[$method][$uri])) {
                 $handler = $this->routes[$method][$uri];
@@ -43,7 +42,6 @@ class Router
             if (isset($this->routes[$method][$uri['path']])) {
                 $handler = $this->routes[$method][$uri['path']];
                 if (is_callable($handler)) {
-                    debug($handler);
                     $handler();
                 } elseif (is_array($handler) && count($handler) === 2) {
                     $this->parseQueryString($uri['query']);
@@ -68,14 +66,9 @@ class Router
         $queryParams = explode('&', $queryString);
 
         foreach ($queryParams as $param) {
-            // Divide o par chave-valor
             list($key, $value) = explode('=', $param);
-
-            // Decodifica a chave e o valor
             $key = urldecode($key);
             $value = urldecode($value);
-
-            // Define as variáveis globais $_GET
             $_GET[$key] = $value;
         }
     }
