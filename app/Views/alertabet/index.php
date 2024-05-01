@@ -52,7 +52,7 @@
     <div class="container">
         <h1>Bem-vindo ao Alerta Bet!</h1>
         <p>O seu lugar para criar alertas das suas estratégias de apostas esportivas.</p>
-        <a href="/jogos" class="btn">Ver Jogos</a>
+        <a href="/configurar-lista" class="btn">Começar</a>
     </div>
 </body>
 

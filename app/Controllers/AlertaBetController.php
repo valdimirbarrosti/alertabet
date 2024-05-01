@@ -39,6 +39,19 @@ class AlertaBetController
         require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'alertabet' . DIRECTORY_SEPARATOR . 'index.php';
     }
 
+    public function showListConfig()
+    {
+        require_once dirname(dirname(__DIR__))
+            . DIRECTORY_SEPARATOR
+            . 'app'
+            . DIRECTORY_SEPARATOR
+            . 'Views'
+            . DIRECTORY_SEPARATOR
+            . 'alertabet'
+            . DIRECTORY_SEPARATOR
+            . 'list-config.php';
+    }
+
     public function showGames()
     {
         $search = $_GET['search'] ?? false;
@@ -47,9 +60,11 @@ class AlertaBetController
             $apiKey = $_GET['apiKey'] ?? '';
             $markets = $_GET['markets'] ?? '';
             $bookmakers = $_GET['bookmakers'] ?? '';
-            $this->getGames($apiKey, $markets, $bookmakers);
+            $sportType = $_GET['sport'] ?? '';
+            $arraySport = $this->getSportsBySport($sportType);
+            $this->getGames($apiKey, $arraySport, $markets, $bookmakers, $sportType);
         } else {
-            require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR .  'alertabet' . DIRECTORY_SEPARATOR . 'games.php';
+            die('Dados inválidos!');
         }
     }
 
@@ -100,26 +115,11 @@ class AlertaBetController
         require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'alertabet' . DIRECTORY_SEPARATOR . 'monitor.php';
     }
 
-    public function getGames($apiKey, $markets, $bookmakers)
+    public function getGames($apiKey, $arraySport, $markets, $bookmakers, $sportType)
     {
-        if (empty($apiKey) ||  empty($markets) ||  empty($bookmakers)) {
+        if (empty($apiKey) ||  empty($markets) ||  empty($bookmakers) ||  empty($arraySport) ||  empty($sportType)) {
             throw new \InvalidArgumentException('Todos os parâmetros obrigatórios devem ser fornecidos.');
         }
-
-        $arraySport = [
-            'soccer_brazil_campeonato',
-            'soccer_brazil_serie_b',
-            'soccer_spain_la_liga',
-            'soccer_italy_serie_a',
-            'soccer_portugal_primeira_liga',
-            'soccer_epl',
-            'soccer_germany_bundesliga',
-            'soccer_france_ligue_one',
-            'soccer_turkey_super_league',
-            'soccer_china_superleague',
-            'soccer_netherlands_eredivisie'
-        ];
-
         $table = [];
         foreach ($arraySport as $sport) {
             $endpoint = $this->apiUrl . "sports/$sport/odds/?apiKey=$apiKey&markets=$markets&bookmakers=$bookmakers";
@@ -129,7 +129,6 @@ class AlertaBetController
                 $jsonResponse = $response->getBody();
                 $eventList = json_decode($jsonResponse, true);
                 $count = count($eventList);
-                $countaux = 0;
                 foreach ($eventList as $index => $event) {
                     if ($index >= ($count / 2)) {
                         break;
@@ -244,10 +243,18 @@ class AlertaBetController
 
             return $timeA <=> $timeB;
         });
-
-        require_once dirname(dirname(__DIR__)) . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'alertabet' . DIRECTORY_SEPARATOR . 'games.php';
+        require_once dirname(dirname(__DIR__))
+            . DIRECTORY_SEPARATOR
+            . 'app'
+            . DIRECTORY_SEPARATOR
+            . 'Views'
+            . DIRECTORY_SEPARATOR
+            .  'alertabet'
+            . DIRECTORY_SEPARATOR
+            . 'games'
+            . DIRECTORY_SEPARATOR
+            .  "$sportType.php";
     }
-
 
     public function getSports()
     {
@@ -330,5 +337,38 @@ class AlertaBetController
                 echo "Erro ao fazer a requisição: " . $e->getMessage() . "\n";
             }
         }
+    }
+
+    public function getSportsBySport($sport)
+    {
+        $arraySport = [];
+
+        switch ($sport) {
+            case "soccer":
+                $arraySport = [
+                    'soccer_brazil_campeonato',
+                    'soccer_brazil_serie_b',
+                    'soccer_spain_la_liga',
+                    'soccer_italy_serie_a',
+                    'soccer_portugal_primeira_liga',
+                    'soccer_epl',
+                    'soccer_germany_bundesliga',
+                    'soccer_france_ligue_one',
+                    'soccer_turkey_super_league',
+                    'soccer_china_superleague',
+                    'soccer_netherlands_eredivisie',
+                ];
+                break;
+            case "basketball":
+                $arraySport = [
+                    'basketball_nba',
+                    'basketball_wnba',
+                    'basketball_euroleague'
+                ];
+                break;
+            default:
+                $arraySport = 0;
+        }
+        return $arraySport;
     }
 }
